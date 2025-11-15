@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Library_Management_System.Models.RenewBook>
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<html>
+<head>
+</head>
+<body>
+	<div class="container">
+		<div class="container-fluid">
+			<div class="col-xl-12 pt-3">
+				<div class="card dz-card" id="accordion-three">
+					<div class="card-header flex-wrap justify-content-between">
+						<div>
+							<h4 class="card-title">List Of Returned Books</h4>
+							<div class="tab-content" id="myTabContent-2">
+								<div class="tab-pane fade show active" id="withoutSpace" role="tabpanel" aria-labelledby="home-tab-2">
+									<div class="card-body pt-0">
+										<div class="table-responsive">
+											<table id="tblTable" class="table table-bordered table-striped" style="min-width: 845px">
+												<thead>
+													<tr>
+														<th>@Html.DisplayNameFor(model => model.BookId)</th>
+														<th>@Html.DisplayNameFor(model => model.UserId)</th>
+														<th>@Html.DisplayNameFor(model => model.RenewDate)</th>
+														<th>@Html.DisplayNameFor(model => model.IsRenew)</th>
+														<th>@Html.DisplayNameFor(model => model.IsActive)</th>
+														<th>@Html.DisplayNameFor(model => model.ReturnDate)</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model)
+													{
+														<tr>
+															<td>@item.BookId</td>
+															<td>@item.UserId</td>
+															<td>@item.RenewDate.ToString("yyyy-MM-dd")</td>
+															<td>@item.IsRenew</td>
+															<td>@item.IsActive</td>
+															<td>@item.ReturnDate.ToString("yyyy-MM-dd")</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

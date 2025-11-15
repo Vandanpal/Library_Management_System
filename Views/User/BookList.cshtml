@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Library_Management_System.Models.Book>
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<html>
+<head>
+</head>
+<body>
+	<div class="container">
+		<div class="container-fluid">
+			<div class="col-xl-12 pt-3">
+				<div class="card dz-card" id="accordion-three">
+					<div class="card-header flex-wrap justify-content-between">
+						<h4 class="card-title">List Of Books</h4>
+							<div class="tab-content" id="myTabContent-2">
+								<div class="tab-pane fade show active" id="withoutSpace" role="tabpanel" aria-labelledby="home-tab-2">
+									<div class="card-body pt-0">
+										<div class="table-responsive">
+											<table id="tblTable" class="table table-bordered table-striped" style="min-width: 845px">
+												<thead>
+													<tr>
+														<th>@Html.DisplayNameFor(model => model.ISBN)</th>
+														<th>@Html.DisplayNameFor(model => model.Title)</th>
+														<th>@Html.DisplayNameFor(model => model.Author)</th>
+														<th>@Html.DisplayNameFor(model => model.Category)</th>
+														<th>@Html.DisplayNameFor(model => model.isAvailable)</th>
+														<th>@Html.DisplayNameFor(model => model.CreatedOn)</th>
+														<th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model)
+													{
+														<tr>
+															<td>@item.ISBN</td>
+															<td>@item.Title</td>
+															<td>@item.Author</td>
+															<td>@item.Category</td>
+															<td>@item.isAvailable</td>
+														    <td>@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+															<td>@item.CreatedBy</td>
+															<td>
+																<button type="button" class="btn btn-small btn-success" data-bs-toggle="modal" data-bs-target="#borrowModal-@item.Id">
+																	📖 Borrow
+																</button>
+
+																<div class="modal fade" id="borrowModal-@item.Id" tabindex="-1" aria-labelledby="borrowModalLabel-@item.Id" aria-hidden="true">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<form asp-controller="User" asp-action="BorrowedList" asp-route-id="@item.Id" method="post">
+																				<div class="modal-header">
+																					<h5 class="modal-title" id="borrowModalLabel-@item.Id">Select Return Date</h5>
+																					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																				</div>
+																				<div class="modal-body">
+																					@* <input type="hidden" name="bookId" asp-for="@item.Id" /> *@
+
+																					<label for="ReturnDate">Return Date:</label>
+																					<input type="date" name="ReturnDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+																				</div>
+																				<div class="modal-footer">
+																					<button type="submit" class="btn btn-primary">Confirm Borrow</button>
+																					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+

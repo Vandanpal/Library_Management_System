@@ -1,0 +1,81 @@
+﻿@model Library_Management_System.Models.Login
+<style>
+    body {
+       /*  background-image: url('images/oip (1).jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat; */
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .card-title {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .register-link {
+        margin-top: 15px;
+        display: block;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .alert {
+        max-width: 450px;
+        margin: 20px auto;
+    }
+</style>
+
+<div class="login-container">
+    <div class="card">
+        <div class="card-header text-center">
+            <h4 class="card-title">SignIn</h4>
+        </div>
+        <div class="card-body">
+            <div class="basic-form">
+                <form asp-action="Login" asp-controller="Home" method="post" autocomplete="off">
+                    <div class="mb-3">
+                        <label class="form-label">EmailID</label>
+                        <input asp-for="EmailId" type="email" class="form-control" placeholder="Email" autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" autocomplete="new-password">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Sign In" />
+                </form>
+                <a href="/Home/AddUser" class="register-link">Go To Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Message
+    </div>
+}

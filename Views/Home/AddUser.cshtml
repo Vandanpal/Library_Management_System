@@ -1,0 +1,134 @@
+﻿@model Library_Management_System.Models.UserViewModel
+<div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">User Form</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="basic-form">
+                            <form asp-action="AddUser" asp-controller="Home" method="post" autocomplete="off">
+                                <input type="hidden" asp-for="Users.Id" />
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">First Name</label>
+                                        <input asp-for="Users.FirstName" class="form-control" placeholder="Enter First Name">
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">Last Name</label>
+                                        <input asp-for="Users.LastName" class="form-control" placeholder="Enter Last Name" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">EmailID</label>
+                                        <input asp-for="Users.Email" type="email" class="form-control" placeholder="Email" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">Password</label>
+                                        <input asp-for="Users.Password" type="password" class="form-control" placeholder="Password" autocomplete="new-password">
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="col-form-label pt-0">Gender</label>
+
+                                        <input type="radio" asp-for="Users.Gender" value="Male" /> Male
+                                        <input type="radio" asp-for="Users.Gender" value="Female" /> Female
+                                        
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">Contact No.</label>
+                                        <input asp-for="Users.ContactNo" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Country</label>
+                                        <select asp-for="Users.Country_Id" asp-items="Model.CountryList" id="Country_Id" class="form-control">
+                                            <option>--Select Country--</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label>State</label>
+                                        <select asp-for="Users.State_Id" asp-items="Model.StateList" id="State" class="form-control">
+                                            <option>--Select State--</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label>City</label>
+                                        <select asp-for="Users.City_Id" asp-items="Model.CityList" id="City_Id" class="form-control">
+                                            <option>--Select City--</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label>Role</label>
+                                        <select asp-for="Users.RoleId" asp-items="Model.RoleList" id="Role" class="form-control">
+                                            <option>--Select Role--</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                @if (Model.Users == null || Model.Users.Id == 0)
+                                    {
+                                        <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" class="btn btn-primary pull-right" value="Update" />
+                                    }
+                                
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#Country_Id").change(function () {
+            var countryId = $(this).val();
+            if (countryId) {
+                $.ajax({
+                    url: '/Home/GetStates',
+                    type: 'POST',
+                    data: { Country_Id: countryId },
+                    success: function (data) {
+                        $("#State").empty();
+                        $("#State").append('<option value="">--Select State--</option>');
+                        $.each(data, function (index, state) {
+                            $("#State").append('<option value="' + state.stateId + '">' + state.stateName + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $("#State").empty().append('<option value="">--Select State--</option>');
+            }
+        });
+        //City details bind
+        $("#State").change(function () {
+            var stateId = $(this).val();
+            if (stateId) {
+                $.ajax({
+                    url: '/Home/GetCities',
+                    type: "POST",
+                    dataType: "json",
+                    contentTYPE: "application/json;charset=utf-8;",
+                    data: { stateId: stateId },
+                    success: function (data) {
+                        $("#City_Id").empty();
+                        $("#City_Id").append($('<option></option>').val('').text('--Select City--'));
+                        $.each(data, function (i, item) {
+                            $("#City_Id").append($('<option value="' + item.cityId + '">' + item.cityName + '</option>'));
+                        });
+                    }
+                });
+            } else {
+                $("#City_Id").empty();
+            }
+
+        });
+    });
+</script>
+

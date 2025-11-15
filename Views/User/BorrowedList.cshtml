@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Library_Management_System.Models.BorrowedBook>
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+@if (ViewBag.Reminders != null && ((List<BorrowedBook>)ViewBag.Reminders).Any())
+{
+	<div class="alert alert-warning">
+		<strong>Reminder:</strong> You have books due soon!
+		<ul>
+			@foreach (var book in (List<BorrowedBook>)ViewBag.Reminders)
+			{
+				<li>
+					Book ID: @book.BookId — Due on <strong>@book.ReturnDate.ToString("dd-MM-yyyy")</strong>
+				</li>
+			}
+		</ul>
+	</div>
+}
+@if (ViewBag.OverdueBooks != null && ((List<BorrowedBook>)ViewBag.OverdueBooks).Any())
+{
+	<div class="alert alert-danger">
+		<strong>⚠️ Overdue Notice:</strong> The following books are overdue:
+		<ul>
+			@foreach (var item in (List<BorrowedBook>)ViewBag.OverdueBooks)
+			{
+				<li>
+					Book ID: @item.BookId — Due on <strong>@item.ReturnDate.ToString("dd-MM-yyyy")</strong>
+				</li>
+			}
+		</ul>
+		Please return them as soon as possible.
+	</div>
+}
+
+<html>
+<head>
+</head>
+<body>
+	<div class="container">
+		<div class="container-fluid">
+			<div class="col-xl-12 pt-3">
+				<div class="card dz-card" id="accordion-three">
+					<div class="card-header flex-wrap justify-content-between">
+						<div>
+							<h4 class="card-title">List Of Borrowed</h4>
+							<div class="tab-content" id="myTabContent-2">
+								<div class="tab-pane fade show active" id="withoutSpace" role="tabpanel" aria-labelledby="home-tab-2">
+									<div class="card-body pt-0">
+										<div class="table-responsive">
+											<table id="tblTable" class="table table-bordered table-striped" style="min-width: 845px">
+												<thead>
+													<tr>
+														<th>@Html.DisplayNameFor(model => model.BookId)</th>
+														<th>@Html.DisplayNameFor(model => model.UserId)</th>
+														<th>@Html.DisplayNameFor(model => model.BorrowedDate)</th>
+														<th>@Html.DisplayNameFor(model => model.IsBorrowed)</th>
+														<th>@Html.DisplayNameFor(model => model.IsActive)</th>
+														<th>@Html.DisplayNameFor(model => model.ReturnDate)</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model)
+													{
+														<tr>
+															<td>@item.BookId</td>
+															<td>@item.UserId</td>
+															<td>@item.BorrowedDate.ToString("yyyy-MM-dd")</td>
+															<td>@item.IsBorrowed</td>
+															<td>@item.IsActive</td>
+															<td>@item.ReturnDate.ToString("yyyy-MM-dd")</td>
+															<td>
+																<form asp-controller="User" asp-action="ReturnedList" method="post" style="display:inline;" onsubmit="return confirmReturn();">
+																	<input type="hidden" name="BorrowId" value="@item.BorrowId" />
+																	<button type="submit" class="btn btn-small btn-success" style="padding: 0.375rem 0.75rem;">
+																		📖 Return
+																	</button>
+																</form>
+																<button type="button" class="btn btn-small btn-success" data-bs-toggle="modal" data-bs-target="#borrowModal-@item.BorrowId">
+																	📖 Renew
+																</button>
+
+																<div class="modal fade" id="borrowModal-@item.BorrowId" tabindex="-1" aria-labelledby="borrowModalLabel-@item.BorrowId" aria-hidden="true">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<form asp-controller="User" asp-action="RenewBorrowedBook" asp-route-id="@item.BorrowId" method="post">
+																				<div class="modal-header">
+																					<h5 class="modal-title" id="borrowModalLabel-@item.BorrowId">Select Return Date</h5>
+																					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																				</div>
+																				<div class="modal-body">
+																					<input type="hidden" name="BorrowId" value="@item.BorrowId" />
+
+																					<label for="ReturnDate">Return Date:</label>
+																					<input type="date" name="ReturnDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+																				</div>
+																				<div class="modal-footer">
+																					<button type="submit" class="btn btn-primary">Confirm Renew</button>
+																					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+																				</div>
+																			</form>
+																		</div>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+	function confirmReturn() {
+		return confirm("Are you sure you want to return this book?");
+	}
+</script>

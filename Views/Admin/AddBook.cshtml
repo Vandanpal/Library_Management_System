@@ -1,0 +1,112 @@
+﻿@model Library_Management_System.Models.BookViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<html>
+	<head>
+	</head>
+	<body>
+	<div class="container">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xl-12 pt-3">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Add Book</h4>
+						</div>
+						<div class="card-body">
+							<div class="basic-form">
+								<form asp-action="AddBook" asp-controller="Admin" method="post">
+									<div class="row">
+										<input type="hidden" asp-for="Book.Id" />
+										<div class="mb-3 col-md-6">
+											<label class="form-label">ISBN</label>
+											<input asp-for="Book.ISBN" class="form-control" />
+										</div>
+										<div class="mb-3 col-md-6">
+											<label class="form-label">Title</label>
+											<input asp-for="Book.Title" class="form-control" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="mb-3 col-md-6">
+											<label class="form-label">Category</label>
+											<input asp-for="Book.Category" class="form-control" />
+										</div>
+										<div class="mb-3 col-md-6">
+											<label class="form-label">Author</label>
+											<input asp-for="Book.Author" class="form-control">
+										</div>
+									</div>
+									@if (Model.Book == null || Model.Book.Id == 0)
+									{
+										<input type="submit" class="btn btn-primary" value="Submit" />
+									}
+									else
+									{
+										<input type="submit" class="btn btn-primary pull-right" value="Update" />
+									}
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-12">
+				<div class="card dz-card" id="accordion-three">
+					<div class="card-header flex-wrap justify-content-between">
+						<div>
+							<h4 class="card-title">List Of Books</h4>
+							<div class="tab-content" id="myTabContent-2">
+								<div class="tab-pane fade show active" id="withoutSpace" role="tabpanel" aria-labelledby="home-tab-2">
+									<div class="card-body pt-0">
+										<div class="table-responsive">
+											<table id="tblTable" class="table table-bordered table-striped" style="min-width: 845px">
+												<thead>
+													<tr>
+														<th>@Html.DisplayNameFor(model => model.Book.ISBN)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.Title)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.Author)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.Category)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.isAvailable)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.CreatedOn)</th>
+														<th>@Html.DisplayNameFor(model => model.Book.CreatedBy)</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model.BookList)
+													{
+														<tr>
+															<td>@item.ISBN</td>
+															<td>@item.Title</td>
+															<td>@item.Author</td>
+															<td>@item.Category</td>
+															<td>@item.isAvailable</td>
+															<td>@item.CreatedOn.ToString("yyyy-MM-dd")</td>
+															<td>@item.CreatedBy</td>
+															<td>
+																<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-small btn-success"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+																<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-small btn-danger" onclick="return confirm('Are you sure you want to delete this book ?')"><i class="fas fa-trash" aria-hidden="true"></i></a>
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</body>
+</html>
+
+
+
